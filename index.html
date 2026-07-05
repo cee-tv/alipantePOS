@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html>
+<link rel="icon" type="image/png" href="/favicon.png">
+
+<head>
+  <meta charset="utf-8">
+  <title>Simple POS</title>
+  <meta name="theme-color" content="#3498db">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="favicon.png">
+</head>
+
+<body>
+  <header>
+    <div class="nav-bar">
+      <div class="nav-left">
+        <strong>Alipante Store</strong>
+        
+      </div>
+      <div class="nav-center" id="nav-links">
+        <button class="nav-btn" onclick="showPage('remitsPage')">Remits</button>
+        <button class="nav-btn" onclick="showPage('profitsPage')">Profits</button>
+      </div>
+      <div class="nav-right">
+        <span data-old-bell></span>
+        
+        
+        
+        <button id="hamburger" class="hamburger" aria-label="menu"></button>
+      </div>
+      <div id="hamburger-menu" class="hamburger-menu">
+        <button class="nav-btn" onclick="showPage('cashierPage')">Cashier</button>
+        <button class="nav-btn" onclick="showPage('salesPage')">Sales</button>
+        <button class="nav-btn" onclick="showPage('receiptsPage')">Receipts</button>
+        <button class="nav-btn" onclick="showPage('productsPage')">Stocks</button>
+        <button class="nav-btn" onclick="showPage('lendingPage')">Lending</button>
+        <button class="nav-btn" onclick="showPage('financePage')">Finance</button>
+        <button class="nav-btn" onclick="showPage('adminPage')">Admin</button>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar" style="display:none">
+    <div class="sidebar-brand">
+      <span class="sidebar-brand-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+      <div class="sidebar-brand-text">
+        <strong>Alipante Store</strong>
+        <span id="offline-indicator" class="offline-badge-sidebar" style="display:none">Offline</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav" id="sidebar-nav">
+      <button class="sidebar-link" onclick="showPage('salesPage')" data-page="salesPage">
+        <span class="sicon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></span><span class="slabel">Sales</span>
+      </button>
+      <button class="sidebar-link" onclick="showPage('receiptsPage')" data-page="receiptsPage">
+        <span class="sicon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><span class="slabel">Receipts</span>
+      </button>
+      <button class="sidebar-link" onclick="showPage('cashierPage')" data-page="cashierPage">
+        <span class="sicon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span><span class="slabel">Cashier</span>
+      </button>
+      <button class="sidebar-link" onclick="showPage('productsPage')" data-page="productsPage">
+        <span class="sicon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></span><span class="slabel">Stocks</span>
+      </button>
+      <button class="sidebar-link" onclick="showPage('lendingPage')" data-page="lendingPage">
+        <span class="sicon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span><span class="slabel">Lending</span>
+      </button>
+      <button class="sidebar-link" onclick="showPage('financePage')" data-page="financePage">
+        <span class="sicon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></span><span class="slabel">Finance</span>
+      </button>
+      <button class="sidebar-link" onclick="showPage('remitsPage')" data-page="remitsPage">
+        <span class="sicon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span><span class="slabel">Remits</span>
+      </button>
+      <button class="sidebar-link" onclick="showPage('profitsPage')" data-page="profitsPage">
+        <span class="sicon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span><span class="slabel">Profits</span>
+      </button>
+      <button class="sidebar-link" onclick="showPage('eloadingPage')" data-page="eloadingPage">
+        <span class="sicon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/><path d="M9 7h6M9 11h6M9 15h3"/></svg></span><span class="slabel">eLoading</span>
+      </button>
+      <button class="sidebar-link" onclick="showPage('icePage')" data-page="icePage">
+        <span class="sicon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/><line x1="19.07" y1="4.93" x2="4.93" y2="19.07"/></svg></span><span class="slabel">Ice Sales</span>
+      </button>
+      <button class="sidebar-link" onclick="showPage('adminPage')" data-page="adminPage">
+        <span class="sicon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span><span class="slabel">Admin</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div id="sidebar-user-card" class="sidebar-user-card" style="display:none">
+        <div class="sidebar-user-avatar" id="sidebar-user-avatar">?</div>
+        <div class="sidebar-user-info">
+          <span id="sidebar-user-name" class="sidebar-user-name">User</span>
+          <span id="sidebar-user-role" class="sidebar-user-role-badge">role</span>
+        </div>
+      </div>
+      <button id="logout-btn" class="sidebar-logout hidden">
+        <span class="sicon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span><span class="slabel">Sign Out</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- TOPBAR -->
+  <div class="topbar" id="topbar" style="display:none">
+    <button id="sidebar-toggle-btn" class="sidebar-toggle-btn" aria-label="toggle sidebar"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    <span id="topbar-page-name" class="topbar-page-name">Sales</span>
+    <div class="topbar-actions">
+      <button id="notif-bell-btn" class="notif-bell-btn" aria-label="notifications">
+        <span class="bell-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </span>
+        <span id="notif-badge" class="notif-badge" style="display:none">0</span>
+      </button>
+      <button id="theme-toggle" class="theme-toggle" aria-label="toggle theme"></button>
+      <button id="sound-toggle" class="theme-toggle" aria-label="toggle sound"></button>
+    </div>
+
+  <!-- Sidebar overlay for mobile -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  </div>
+
+  <div id="loginPage" class="page login-page">
+    <div class="login-container card">
+      <div class="login-header">
+         LOGIN TO STORE POS
+      </div>
+
+      <div class="login-controls">
+        <label class="login-label">Username</label>
+        <input id="login-username" type="text" placeholder="Enter username" />
+
+        <label class="login-label">Password</label>
+        <input id="login-password" type="password" placeholder="Enter password" />
+
+        <label class="remember-label">
+          <input id="remember-me" type="checkbox" />
+          <span>Remember me</span>
+        </label>
+
+        <button id="login-btn" class="checkout-btn login-btn">LOGIN</button>
+      </div>
+
+      <div id="login-error" class="login-error"></div>
+    </div>
+
+  </div>
+
+  <div class="container">
+
+    <h2 id="page-title" class="page-title">Point of Sales</h2>
+
+    
+    <div id="salesPage" class="page">
+      <div class="main-layout">
+        <div class="left-panel">
+          <div style="margin-bottom:12px;display:flex;gap:8px;align-items:center">
+            <input type="text" id="product-search" placeholder="Search products or scan barcode..." class="search-bar" style="flex:1" />
+            <button id="scan-barcode-btn" class="checkout-btn scan-barcode-btn" title="Scan Barcode"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5v14M7 5v14M11 5v10M15 5v14M19 5v10M21 5v14"/></svg></button>
+          </div>
+          <div id="categories"></div>
+          <div id="products"></div>
+        </div>
+
+        <div class="right-panel">
+          <div class="cart-header">
+            <h3>Cart</h3>
+            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              <button id="cart-scan-barcode-btn" class="quick-btn" title="Scan Barcode"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px"><path d="M3 5v14M7 5v14M11 5v10M15 5v14M19 5v10M21 5v14"/></svg>Scan</button>
+              <button id="cart-add-item-btn" class="quick-btn" title="Add Item Manually">&#43; Add Item</button>
+              <button id="clear-cart" class="clear-btn">Clear Cart</button>
+            </div>
+          </div>
+
+          <ul id="cart"></ul>
+
+          <div class="totals">
+            <p>Subtotal: <span id="subtotal">PHP 0.00</span></p>
+            <label>Discount: <input id="discount" type="number" step="0.01" min="0" /></label>
+            <p>Total: <span id="total">PHP 0.00</span></p>
+            <label>Cash: <input id="cash" type="number"></label>
+            <p>Change: <span id="change">PHP 0.00</span></p>
+          </div>
+
+          <button id="checkout" class="primary-checkout-btn">Checkout</button>
+        </div>
+      </div>
+
+      <div class="sales-summary card">
+        <h4>Items Sold Summary</h4>
+        <table class="summary-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Unit</th>
+              <th>Sold</th>
+            </tr>
+          </thead>
+          <tbody id="items-sold-tbody"></tbody>
+        </table>
+        <p><strong>Total Income: </strong><span id="total-income">0.00</span></p>
+      </div>
+    </div>
+
+    
+    <div id="receiptsPage" class="page" style="display:none">
+      <h3>Receipts</h3>
+
+      <div class="card filters-card">
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+          <label>From: <input id="filter-start-date" type="date" /></label>
+          <label>To: <input id="filter-end-date" type="date" /></label>
+
+          <button id="quick-today" class="quick-btn">Today</button>
+          <button id="quick-week" class="quick-btn">This Week</button>
+          <button id="quick-month" class="quick-btn">This Month</button>
+
+          <label style="margin-left:8px">Cashier:
+            <select id="cashier-filter">
+              <option value="all">All Cashiers</option>
+            </select>
+          </label>
+
+          <label style="margin-left:8px">Shift:
+            <select id="shift-filter">
+              <option value="all">All Shifts</option>
+            </select>
+          </label>
+
+          <button id="export-history-csv" class="checkout-btn">Export to CSV</button>
+        </div>
+
+        <div style="margin-top:10px;display:flex;gap:12px;align-items:center">
+          <div><strong>Sales:</strong> <span id="filtered-count">0</span></div>
+          <div><strong>Total Income:</strong> <span id="filtered-income">0.00</span></div>
+        </div>
+      </div>
+
+      <ul id="history-list" style="list-style:none;padding:0;margin:0"></ul>
+      <div id="history-empty" style="color:var(--muted);margin-top:12px;display:none">No sales found</div>
+    </div>
+
+    
+    <div id="cashierPage" class="page" style="display:none">
+      <h3>Cashier</h3>
+      <div class="card">
+        <div style="display:flex;gap:12px;align-items:center">
+          <div style="display:flex;gap:8px;align-items:center">
+            <button id="start-shift-btn-cashier" class="checkout-btn start-shift-btn">Start New Shift</button>
+            <button id="end-shift-btn-cashier" class="remove-btn start-shift-btn" style="margin-left:6px">End
+              Shift</button>
+            <div id="cashier-shift-info" style="margin-left:8px;color:var(--muted)"></div>
+          </div>
+        </div>
+        <p style="margin-top:8px;color:var(--muted)">Start or close shifts from here.</p>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h4>My Shift History</h4>
+        <div id="cashier-my-shifts" style="margin-top:8px;color:var(--muted)">Loading...</div>
+      </div>
+    </div>
+
+    
+    <div id="productsPage" class="page" style="display:none">
+      <h3>Stocks</h3>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+        <button id="add-product-btn" class="checkout-btn">Add New Product</button>
+        <button id="toggle-edit-products" class="remove-btn">Edit Stocks</button>
+        <button id="delete-selected" class="remove-btn" style="display:none">Delete Selected</button>
+      </div>
+
+      <div class="card" style="margin-bottom:16px">
+        <h4>Manage Categories</h4>
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <input type="text" id="new-category-name" placeholder="New Category Name" />
+          <button id="add-category-btn" class="checkout-btn" style="margin-top:0;width:auto">Add Category</button>
+        </div>
+        <div id="categories-management-list" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+        <div style="margin-top:12px">
+          <button id="toggle-color-mode" class="quick-btn">Change Colors</button>
+          <span id="color-mode-status" style="margin-left:8px;font-size:13px;color:var(--muted);display:none">Color
+            Selection Mode Active (Click a category to cycle colors)</span>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+        <input type="text" id="stock-search" placeholder="Search stocks..." class="search-bar" style="flex:1;min-width:180px" />
+        <span id="total-products-count" style="font-size:13px;color:var(--muted);white-space:nowrap"></span>
+      </div>
+      <div id="products-edit-list"></div>
+    </div>
+
+    
+    <!-- eLoading Page -->
+    <div id="eloadingPage" class="page" style="display:none">
+      <div class="eload-header-row">
+        <h3 style="margin:0">eLoading</h3>
+        <div class="eload-date-filter">
+          <label style="font-size:13px;font-weight:600;color:var(--muted)">From:</label>
+          <input type="date" id="eload-filter-start-date" />
+          <label style="font-size:13px;font-weight:600;color:var(--muted)">To:</label>
+          <input type="date" id="eload-filter-end-date" />
+          <button id="eload-daily-btn" class="quick-btn">Daily</button>
+          <button id="eload-weekly-btn" class="quick-btn">Weekly</button>
+          <button id="eload-monthly-btn" class="quick-btn">Monthly</button>
+        </div>
+      </div>
+
+      <div class="eload-summary-grid">
+        <div class="eload-summary-card">
+          <div class="eload-sum-icon logo-wrap"><img src="logos/gcash.png" alt="GCash" class="eload-logo-img"><span class="eload-dir-badge dir-in">&#8593;</span></div>
+          <div class="eload-sum-body"><span class="eload-sum-label">GCash Cash-in</span><span class="eload-sum-val" id="eload-val-gcash-cashin">PHP 0.00</span><span class="eload-sum-fee" id="eload-fee-gcash-cashin">PHP 0.00 commission</span></div>
+        </div>
+        <div class="eload-summary-card">
+          <div class="eload-sum-icon logo-wrap"><img src="logos/gcash.png" alt="GCash" class="eload-logo-img"><span class="eload-dir-badge dir-out">&#8595;</span></div>
+          <div class="eload-sum-body"><span class="eload-sum-label">GCash Cash-out</span><span class="eload-sum-val" id="eload-val-gcash-cashout">PHP 0.00</span><span class="eload-sum-fee" id="eload-fee-gcash-cashout">PHP 0.00 commission</span></div>
+        </div>
+        <div class="eload-summary-card">
+          <div class="eload-sum-icon logo-wrap"><img src="logos/maya.png" alt="Maya" class="eload-logo-img"><span class="eload-dir-badge dir-in">&#8593;</span></div>
+          <div class="eload-sum-body"><span class="eload-sum-label">Maya Cash-in</span><span class="eload-sum-val" id="eload-val-maya-cashin">PHP 0.00</span><span class="eload-sum-fee" id="eload-fee-maya-cashin">PHP 0.00 commission</span></div>
+        </div>
+        <div class="eload-summary-card">
+          <div class="eload-sum-icon logo-wrap"><img src="logos/maya.png" alt="Maya" class="eload-logo-img"><span class="eload-dir-badge dir-out">&#8595;</span></div>
+          <div class="eload-sum-body"><span class="eload-sum-label">Maya Cash-out</span><span class="eload-sum-val" id="eload-val-maya-cashout">PHP 0.00</span><span class="eload-sum-fee" id="eload-fee-maya-cashout">PHP 0.00 commission</span></div>
+        </div>
+        <div class="eload-summary-card">
+          <div class="eload-sum-icon logo-wrap"><img src="logos/bank.png" alt="Bank" class="eload-logo-img"><span class="eload-dir-badge dir-in">&#8593;</span></div>
+          <div class="eload-sum-body"><span class="eload-sum-label">Bank Cash-in</span><span class="eload-sum-val" id="eload-val-bank-cashin">PHP 0.00</span><span class="eload-sum-fee" id="eload-fee-bank-cashin">PHP 0.00 commission</span></div>
+        </div>
+        <div class="eload-summary-card">
+          <div class="eload-sum-icon logo-wrap"><img src="logos/bank.png" alt="Bank" class="eload-logo-img"><span class="eload-dir-badge dir-out">&#8595;</span></div>
+          <div class="eload-sum-body"><span class="eload-sum-label">Bank Cash-out</span><span class="eload-sum-val" id="eload-val-bank-cashout">PHP 0.00</span><span class="eload-sum-fee" id="eload-fee-bank-cashout">PHP 0.00 commission</span></div>
+        </div>
+        <div class="eload-summary-card">
+          <div class="eload-sum-icon logo-wrap logo-wrap-light"><img src="logos/gfiber.png" alt="GFiber" class="eload-logo-img"></div>
+          <div class="eload-sum-body"><span class="eload-sum-label">WiFi Load</span><span class="eload-sum-val" id="eload-val-wifi-load">PHP 0.00</span><span class="eload-sum-fee" id="eload-fee-wifi-load">PHP 0.00 commission</span></div>
+        </div>
+        <div class="eload-summary-card">
+          <div class="eload-sum-icon logo-wrap"><img src="logos/dito.png" alt="DITO" class="eload-logo-img"></div>
+          <div class="eload-sum-body"><span class="eload-sum-label">Data Load</span><span class="eload-sum-val" id="eload-val-data-load">PHP 0.00</span><span class="eload-sum-fee" id="eload-fee-data-load">PHP 0.00 commission</span></div>
+        </div>
+      </div>
+
+      <div class="eload-total-bar card">
+        <span>Total Commission</span>
+        <span id="eload-total-commission" class="eload-total-val">PHP 0.00</span>
+      </div>
+
+      <div class="card eload-form-card">
+        <div class="eload-type-selector" id="eload-type-selector">
+          <div class="eload-provider-row">
+            <button class="eload-type-btn active" data-provider="gcash">GCash</button>
+            <button class="eload-type-btn" data-provider="maya">Maya</button>
+            <button class="eload-type-btn" data-provider="bank">Bank</button>
+            <button class="eload-type-btn" data-provider="wifi-load">WiFi Load</button>
+            <button class="eload-type-btn" data-provider="data-load">Data Load</button>
+          </div>
+          <div class="eload-direction-row" id="eload-direction-row">
+            <button class="eload-dir-btn active" data-dir="cashin">&#8593; Cash-in</button>
+            <button class="eload-dir-btn" data-dir="cashout">&#8595; Cash-out</button>
+          </div>
+        </div>
+        <div class="eload-form-fields">
+          <div>
+            <label class="eload-field-label">Amount Sent / Loaded (PHP)</label>
+            <input type="number" id="eload-amount" step="0.01" min="0" placeholder="0.00" />
+          </div>
+          <div>
+            <label class="eload-field-label">Commission / Fee Earned (PHP)</label>
+            <input type="number" id="eload-fee" step="0.01" min="0" placeholder="0.00" />
+          </div>
+          <div>
+            <label class="eload-field-label">Mobile Number (optional)</label>
+            <input type="tel" id="eload-mobile" placeholder="e.g. 09123456789" inputmode="numeric" />
+          </div>
+          <div>
+            <label class="eload-field-label">Customer Name (optional)</label>
+            <input type="text" id="eload-customer" placeholder="e.g. Juan dela Cruz" />
+          </div>
+          <div>
+            <label class="eload-field-label">Reference / Transaction No. (optional)</label>
+            <input type="text" id="eload-refnum" placeholder="e.g. REF123456" />
+          </div>
+        </div>
+        <button id="eload-save-btn" class="checkout-btn" style="margin-top:12px">Record Transaction</button>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <h4 style="margin:0;font-size:15px;font-weight:700">Transactions</h4>
+          <span id="eload-tx-count" style="font-size:13px;color:var(--muted)"></span>
+        </div>
+        <div id="eload-history">Loading...</div>
+      </div>
+    </div>
+
+    
+    <!-- Ice Sales Page -->
+    <div id="icePage" class="page" style="display:none">
+      <div class="eload-header-row">
+        <h3 style="margin:0"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px"><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/><line x1="19.07" y1="4.93" x2="4.93" y2="19.07"/></svg>Ice Sales</h3>
+        <div class="eload-date-filter">
+          <label style="font-size:13px;font-weight:600;color:var(--muted)">From:</label>
+          <input type="date" id="ice-filter-start-date" />
+          <label style="font-size:13px;font-weight:600;color:var(--muted)">To:</label>
+          <input type="date" id="ice-filter-end-date" />
+          <button id="ice-daily-btn" class="quick-btn">Daily</button>
+          <button id="ice-weekly-btn" class="quick-btn">Weekly</button>
+          <button id="ice-monthly-btn" class="quick-btn">Monthly</button>
+        </div>
+      </div>
+
+      <div class="ice-summary-row">
+        <div class="ice-sum-card">
+          <span class="ice-sum-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/><line x1="19.07" y1="4.93" x2="4.93" y2="19.07"/></svg></span>
+          <div class="ice-sum-body">
+            <span class="ice-sum-label">Total Income</span>
+            <span class="ice-sum-val" id="ice-total-income">PHP 0.00</span>
+          </div>
+        </div>
+        <div class="ice-sum-card">
+          <span class="ice-sum-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
+          <div class="ice-sum-body">
+            <span class="ice-sum-label">Bags Sold</span>
+            <span class="ice-sum-val" id="ice-total-qty">0</span>
+          </div>
+        </div>
+        <div class="ice-sum-card">
+          <span class="ice-sum-icon"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+          <div class="ice-sum-body">
+            <span class="ice-sum-label">Transactions</span>
+            <span class="ice-sum-val" id="ice-tx-count">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px">
+        <h4 style="margin:0 0 14px;font-size:15px;font-weight:700">Record Ice Sale</h4>
+        <div class="ice-form-fields">
+          <div>
+            <label class="eload-field-label">Price per Bag (PHP)</label>
+            <input type="number" id="ice-price" step="0.01" min="0" placeholder="0.00" />
+          </div>
+          <div>
+            <label class="eload-field-label">Quantity (Bags)</label>
+            <input type="number" id="ice-qty" min="1" step="1" placeholder="1" />
+          </div>
+        </div>
+        <div style="margin-top:12px;font-size:15px;font-weight:700;color:var(--primary)">
+          Total: <span id="ice-form-total">PHP 0.00</span>
+        </div>
+        <button id="ice-save-btn" class="checkout-btn" style="margin-top:12px">Record Sale</button>
+      </div>
+
+      <div class="card">
+        <h4 style="margin:0 0 12px;font-size:15px;font-weight:700">Transactions</h4>
+        <div id="ice-history">Loading...</div>
+      </div>
+    </div>
+
+    <div id="adminPage" class="page" style="display:none">
+      <h3>Admin</h3>
+      <div class="admin-actions">
+        <button id="export-sales" class="checkout-btn">Export Sales (CSV)</button>
+        <button id="export-price-list" class="checkout-btn">Export Price List (CSV)</button>
+        <button id="start-shift-btn-admin" class="checkout-btn start-shift-btn">Start New Shift</button>
+        <button id="end-shift-btn-admin" class="remove-btn start-shift-btn" style="margin-left:6px">End Shift</button>
+        <button id="clear-sales" class="remove-btn">Clear All Sales</button>
+      </div>
+      <div style="margin-top:12px;color:var(--muted)"><span id="admin-shift-info"></span></div>
+
+      <div class="card" style="margin-top:12px">
+        <h4>Cashier Shift History</h4>
+        <div id="admin-cashier-list" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+        <div id="admin-cashier-shifts" style="margin-top:8px"></div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h4>Employees</h4>
+        <div id="admin-employees-list" style="margin-top:8px"></div>
+        <div style="margin-top:8px"><button id="admin-add-employee" class="checkout-btn">Add Employee</button></div>
+      </div>
+    </div>
+
+    
+    <div id="remitsPage" class="page" style="display:none">
+      <h3>Remits</h3>
+      <div class="card">
+        <h4>Weekly Capital Summary</h4>
+        <div id="remits-list" style="margin-top:8px"></div>
+        <p><strong>This Week's Capital: </strong><span id="weekly-capital">0.00</span></p>
+        <button id="reset-weekly-capital" class="remove-btn">Reset Weekly Capital</button>
+      </div>
+    </div>
+
+    
+    <div id="profitsPage" class="page" style="display:none">
+      <h3>Profits</h3>
+      <div class="card">
+        <h4>Weekly Profit Summary</h4>
+        <div id="profits-list" style="margin-top:8px"></div>
+        <p><strong>This Week's Profit: </strong><span id="weekly-profit">0.00</span></p>
+        <button id="reset-weekly-profits" class="remove-btn">Reset Weekly Profits</button>
+      </div>
+    </div>
+
+    
+    <div id="financePage" class="page" style="display:none">
+      <h3>Finance Dashboard</h3>
+
+      <div class="card finance-filters">
+        <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+          <button class="quick-btn fin-preset" data-preset="daily">Daily</button>
+          <button class="quick-btn fin-preset active" data-preset="weekly">Weekly</button>
+          <button class="quick-btn fin-preset" data-preset="monthly">Monthly</button>
+          <button class="quick-btn fin-preset" data-preset="annual">Annual</button>
+
+          <div style="display:flex;gap:8px;align-items:center;margin-left:8px">
+            <label>From: <input id="fin-start-date" type="date" /></label>
+            <label>To: <input id="fin-end-date" type="date" /></label>
+          </div>
+        </div>
+        <div id="fin-range-display" style="margin-top:10px;font-weight:700;color:var(--primary)"></div>
+        <div id="fin-date-warning" style="color:var(--danger);font-size:12px;margin-top:4px;display:none"> TO date
+          cannot be earlier than FROM date</div>
+      </div>
+
+      
+      <div class="card finance-section net-income-section">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h4> Net Income</h4>
+          <span class="net-income-value" id="net-income">PHP 0.00</span>
+        </div>
+        <p class="net-income-formula">Income - Expenses</p>
+      </div>
+
+      
+      <div class="card finance-section">
+        <h4> Income</h4>
+        <div class="finance-stats">
+          <div class="stat-item">
+            <span class="stat-label">Total Income:</span>
+            <span id="fin-total-income" class="stat-value">PHP 0.00</span>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="card finance-section">
+        <h4> Remits (Capital)</h4>
+        <div id="finance-remits-list" style="margin-top:8px"></div>
+        <p style="margin-top:12px"><strong>Total Capital:</strong> <span id="finance-total-capital">PHP 0.00</span></p>
+      </div>
+
+      
+      <div class="card finance-section">
+        <h4> Profits</h4>
+        <div id="finance-profits-list" style="margin-top:8px"></div>
+        <p style="margin-top:12px"><strong>Total Profit:</strong> <span id="finance-total-profit">PHP 0.00</span></p>
+      </div>
+
+      
+      <div class="card finance-section">
+        <h4> Expenses</h4>
+        <div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <input id="expense-amount" type="number" step="0.01" placeholder="Amount" style="width:120px" />
+          <input id="expense-reason" type="text" placeholder="Reason/Description" style="width:200px;flex:1" />
+          <button id="add-expense-btn" class="checkout-btn">Add Expense</button>
+        </div>
+        <div id="expenses-list" style="margin-top:12px"></div>
+        <p style="margin-top:12px"><strong>Total Expenses:</strong> <span id="weekly-expenses">PHP 0.00</span></p>
+        <button id="reset-expenses-btn" class="remove-btn" style="margin-top:8px">Reset Expenses</button>
+      </div>
+    </div>
+  <div id="lendingPage" class="page" style="display:none">
+    <div class="main-layout">
+      <div class="left-panel">
+        <h3>Items</h3>
+        <div style="margin-bottom:12px;">
+          <input type="text" id="lending-product-search" placeholder="Search items..." class="search-bar" />
+        </div>
+        <div id="lending-categories"></div>
+        <div id="lending-products"></div>
+      </div>
+
+      <div class="right-panel">
+        <div class="cart-header">
+          <h3>Lending Cart</h3>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button id="clear-lending-cart" class="clear-btn">Clear Cart</button>
+          </div>
+        </div>
+
+        <ul id="lending-cart"></ul>
+
+        <div class="totals">
+          <p>Total: <span id="lending-total">PHP 0.00</span></p>
+        </div>
+
+        <button id="lend" class="primary-checkout-btn">Lend</button>
+      </div>
+    </div>
+
+    
+    <div class="card" style="margin-top:20px">
+      <h4>Borrowers List</h4>
+      <div id="borrowers-list" style="margin-top:8px"></div>
+    </div>
+  </div>
+
+  </div>
+
+  
+  
+
+  
+  <div id="add-product-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content add-product-modal-content">
+      <div class="add-product-header">
+        <h4>Add Product</h4>
+        <button id="add-product-close" class="clear-btn" style="font-size:20px;padding:4px 8px">&times;</button>
+      </div>
+      <div class="add-product-grid">
+        <div class="ap-field ap-full">
+          <label class="ap-label">Product Name</label>
+          <input id="new-product-name" type="text" placeholder="e.g. Rice 1kg" />
+        </div>
+        <div class="ap-field ap-full">
+          <label class="ap-label">Barcode <span class="ap-auto-badge">optional</span></label>
+          <div style="display:flex;gap:8px">
+            <input id="new-product-barcode" type="text" placeholder="Scan or type barcode" style="flex:1" />
+            <button id="new-product-scan-barcode" type="button" class="quick-btn" title="Scan Barcode"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5v14M7 5v14M11 5v10M15 5v14M19 5v10M21 5v14"/></svg></button>
+          </div>
+        </div>
+        <div class="ap-field">
+          <label class="ap-label">Unit</label>
+          <select id="new-product-unit">
+            <option value="pcs">pcs</option>
+            <option value="Kg">Kg</option>
+          </select>
+        </div>
+        <div class="ap-field">
+          <label class="ap-label">Category</label>
+          <select id="new-product-category"></select>
+        </div>
+        <div class="ap-field">
+          <label class="ap-label">Price</label>
+          <input id="new-product-price" type="number" step="0.01" placeholder="0.00" />
+        </div>
+        <div class="ap-field">
+          <label class="ap-label">Capital</label>
+          <input id="new-product-capital" type="number" step="0.01" placeholder="0.00" />
+        </div>
+        <div class="ap-field">
+          <label class="ap-label">Profit <span class="ap-auto-badge">auto</span></label>
+          <input id="new-product-profit" type="number" step="0.01" placeholder="0.00" readonly />
+        </div>
+        <div class="ap-field">
+          <label class="ap-label">Stock</label>
+          <input id="new-product-stock" type="number" min="0" placeholder="0" />
+        </div>
+        <div class="ap-field ap-full">
+          <label class="ap-label">Expiration Dates <span class="ap-auto-badge">optional</span></label>
+          <div id="new-product-expiry-list" class="expiry-list"></div>
+          <button type="button" id="new-product-add-expiry" class="quick-btn" style="margin-top:6px"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add Expiration Date</button>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button id="add-product-cancel" class="clear-btn">Cancel</button>
+        <button id="add-product-save" class="checkout-btn">Save Product</button>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="barcode-scanner-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content barcode-scanner-modal-content">
+      <div class="add-product-header">
+        <h4>Scan Barcode</h4>
+        <button id="barcode-scanner-close" class="clear-btn" style="font-size:20px;padding:4px 8px">&times;</button>
+      </div>
+      <div id="barcode-scanner-view"></div>
+      <div id="barcode-scanner-status" style="margin-top:8px;color:var(--muted);font-size:13px;text-align:center"></div>
+    </div>
+  </div>
+
+  
+  <div id="add-employee-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h4>Add Employee / User</h4>
+        <button id="add-employee-close" class="clear-btn" style="font-size:20px;padding:4px 8px"></button>
+      </div>
+      <div class="modal-row">
+        <label>Full Name: <input id="new-employee-fullname" type="text" /></label>
+      </div>
+      <div class="modal-row">
+        <label>Username: <input id="new-employee-username" type="text" /></label>
+      </div>
+      <div class="modal-row">
+        <label>Password: <input id="new-employee-password" type="password" /></label>
+      </div>
+      <div class="modal-row">
+        <label>Role:
+          <select id="new-employee-role">
+            <option value="cashier">cashier</option>
+            <option value="admin">admin</option>
+          </select>
+        </label>
+      </div>
+      <div class="modal-actions">
+        <button id="add-employee-cancel" class="clear-btn">Cancel</button>
+        <button id="add-employee-save" class="checkout-btn">Save</button>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="weight-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h4 id="modal-product-name">Add weight</h4>
+        <button id="weight-modal-close" class="clear-btn" style="font-size:20px;padding:4px 8px"></button>
+      </div>
+      <p>Price: <span id="modal-price">0</span> per Kg</p>
+
+      <div class="modal-row">
+        <label>Weight (Kg): <input id="modal-weight" type="number" step="0.01" min="0" /></label>
+      </div>
+
+      <div class="modal-row">
+        <label>Amount: <input id="modal-amount" type="number" step="0.01" min="0" /></label>
+      </div>
+
+      <div class="modal-actions">
+        <button id="modal-add" class="checkout-btn">Add</button>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="lending-weight-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h4 id="lending-modal-product-name">Add weight</h4>
+        <button id="lending-weight-modal-close" class="clear-btn" style="font-size:20px;padding:4px 8px"></button>
+      </div>
+      <p>Price: <span id="lending-modal-price">0</span> per Kg</p>
+
+      <div class="modal-row">
+        <label>Weight (Kg): <input id="lending-modal-weight" type="number" step="0.01" min="0" /></label>
+      </div>
+
+      <div class="modal-row">
+        <label>Amount: <input id="lending-modal-amount" type="number" step="0.01" min="0" /></label>
+      </div>
+
+      <div class="modal-actions">
+        <button id="lending-modal-add" class="checkout-btn">Add</button>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="receipt-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content receipt-modal-content">
+      <!-- Store header -->
+      <div class="receipt-header-row">
+        <div class="receipt-store-name">Alipante Store</div>
+        <button id="receipt-close" class="clear-btn receipt-close-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div id="receipt-datetime" class="receipt-meta"></div>
+      <div id="receipt-cashier" class="receipt-meta"></div>
+
+      <div class="receipt-divider"></div>
+
+      <!-- Column labels -->
+      <div class="receipt-col-header">
+        <span class="rcol-name">Item</span>
+        <span class="rcol-qty">Qty</span>
+        <span class="rcol-price">Price</span>
+        <span class="rcol-amt">Total</span>
+      </div>
+
+      <ul id="receipt-items" style="list-style:none;padding:0;margin:0;max-height:220px;overflow:auto"></ul>
+
+      <div class="receipt-divider"></div>
+
+      <!-- Totals -->
+      <div class="receipt-totals">
+        <div class="receipt-total-row">
+          <span>Subtotal</span><span id="receipt-subtotal">PHP 0.00</span>
+        </div>
+        <div class="receipt-total-row">
+          <span>Discount</span><span id="receipt-discount">PHP 0.00</span>
+        </div>
+        <div class="receipt-divider"></div>
+        <div class="receipt-total-row receipt-grand-total">
+          <span>TOTAL</span><span id="receipt-total">PHP 0.00</span>
+        </div>
+        <div class="receipt-divider"></div>
+        <div class="receipt-total-row">
+          <span>Cash</span>
+          <input id="receipt-cash" type="number" step="0.01" min="0" class="receipt-cash-input" />
+        </div>
+        <div class="receipt-total-row">
+          <span>Change</span><span id="receipt-change">PHP 0.00</span>
+        </div>
+      </div>
+
+      <div class="receipt-divider"></div>
+      <div class="receipt-thank-you">— Thank you for shopping! —</div>
+
+      <div class="modal-actions" style="margin-top:14px">
+        <button id="receipt-save" class="checkout-btn">Add to Sales</button>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="error-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <h4> Warning!</h4>
+      <div id="error-modal-message" style="color:var(--danger);margin:8px 0">Cannot proceed to checkout. Cash Payment
+        isn't enough</div>
+      <div class="modal-actions">
+        <button id="error-ok" class="clear-btn">OK</button>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="borrower-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <h4>Enter Borrower Name</h4>
+      <div class="modal-row">
+        <label>Borrower Name: <input id="borrower-name" type="text" placeholder="Enter borrower's name" /></label>
+      </div>
+      <div class="modal-actions">
+        <button id="borrower-cancel" class="clear-btn">Cancel</button>
+        <button id="borrower-confirm" class="checkout-btn">Confirm Lend</button>
+      </div>
+    </div>
+  </div>
+
+  
+  <div id="lending-details-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content" id="lending-details-content">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h4>Borrower: <span id="lending-details-name"></span></h4>
+        <button id="lending-details-close" class="clear-btn" style="font-size:20px;padding:4px 8px"></button>
+      </div>
+      <div class="modal-row">
+        <p>Outstanding Balance: <strong><span id="lending-details-balance">0.00</span></strong></p>
+      </div>
+      <div id="lending-details-entries-container"
+        style="max-height:300px;overflow:auto;margin:10px 0;border:1px solid var(--border);border-radius:8px;padding:8px">
+        
+      </div>
+      <div class="modal-actions">
+        <button id="lending-details-cancel" class="clear-btn">Close</button>
+        <button id="lending-details-full-payment" class="checkout-btn">Full Payment</button>
+        <button id="lending-details-partial-payment" class="checkout-btn">Partial Payment</button>
+      </div>
+    </div>
+  </div>
+
+
+  
+  <div id="payment-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h4>Record Payment</h4>
+        <button id="payment-cancel" class="clear-btn" style="font-size:20px;padding:4px 8px"></button>
+      </div>
+      <div class="modal-row">
+        <p>Borrower: <strong><span id="payment-borrower-name"></span></strong></p>
+      </div>
+      <div class="modal-row">
+        <p>Outstanding Balance: <strong><span id="payment-unpaid-total">0.00</span></strong></p>
+      </div>
+      <div id="payment-items"
+        style="max-height:240px;overflow:auto;margin:10px 0;border:1px solid var(--border);border-radius:8px;padding:8px">
+      </div>
+      <div class="modal-row">
+        <label>Payment Amount: <input id="payment-amount" type="number" step="0.01" min="0" /></label>
+      </div>
+      <div class="modal-actions">
+        <button id="payment-full" class="clear-btn">Pay Full Amount</button>
+        <button id="payment-confirm" class="checkout-btn">Confirm Payment</button>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="app.js"></script>
+  <script>
+if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js?v=3')
+          .then(reg => console.log('SW registered!', reg))
+          .catch(err => console.log('SW registration failed!', err));
+      });
+    }
+
+
+    window.addEventListener('online', () => {
+      const badge = document.getElementById('offline-indicator');
+      if (badge) badge.style.display = 'none';
+      if (window.syncData) window.syncData();
+    });
+    window.addEventListener('offline', () => {
+      const badge = document.getElementById('offline-indicator');
+      if (badge) badge.style.display = 'inline-block';
+    });
+
+    if (!navigator.onLine) {
+      document.addEventListener('DOMContentLoaded', () => {
+        const badge = document.getElementById('offline-indicator');
+        if (badge) badge.style.display = 'inline-block';
+      });
+    }
+  </script>
+
+  <!-- Notifications Modal -->
+  <div id="notifications-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content notif-modal-content">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <h4><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>Notifications</h4>
+        <button id="notif-modal-close" class="clear-btn" style="padding:4px 8px"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div id="notif-modal-list"></div>
+      <div id="notif-modal-empty" style="color:var(--muted);text-align:center;padding:16px;display:none">No notifications</div>
+    </div>
+  </div>
+
+  <!-- eLoading detail modal -->
+  <div id="eload-detail-modal" class="modal hidden" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-content" style="max-width:400px">
+      <div class="modal-header">
+        <h3 id="eload-detail-title" style="margin:0;font-size:17px">Transaction Detail</h3>
+        <button class="modal-close" onclick="closeEloadDetail()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+      <div id="eload-detail-body" style="margin-top:16px;display:flex;flex-direction:column;gap:10px"></div>
+      <div style="margin-top:20px;display:flex;justify-content:flex-end;gap:8px">
+        <button id="eload-detail-delete-btn" class="remove-btn" style="margin-top:0">Delete</button>
+        <button onclick="closeEloadDetail()" class="checkout-btn" style="margin-top:0">Close</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
